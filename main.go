@@ -17,11 +17,19 @@ const STATIC_FILE_ROOT = "C:/workspace/ict/gitsvn/ictinv-ui-svcmgt/dist"
 const STATIC_FILE_INDEX = STATIC_FILE_ROOT + "/index.html"
 
 func main() {
-	fileSvr := http.FileServer(http.Dir("C:/workspace/ict/gitsvn/ictinv-ui-svcmgt/dist"))
+	initHandlers()
+	startServ()
+}
 
-	http.Handle("/", interceptHandler(fileSvr, defaultErrorHandler))
-	http.HandleFunc("/api/", handleRequest_list)
+func initHandlers() {
+	//fileSvr := http.FileServer(http.Dir("C:/workspace/ict/gitsvn/ictinv-ui-svcmgt/dist"))
 
+	//http.Handle("/", interceptHandler(fileSvr, defaultErrorHandler))
+	http.HandleFunc("/api/list", fake_dir_list)
+	//http.HandleFunc("/api/", handleRequest_list)
+}
+
+func startServ() {
 	log.Printf("Started serve on %v...", SERVE)
 	log.Fatal(http.ListenAndServe(":8811", nil))
 }
