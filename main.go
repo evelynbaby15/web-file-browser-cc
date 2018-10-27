@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"io"
 	"mime"
@@ -12,10 +13,6 @@ import (
 	"path/filepath"
 )
 
-const SERVE = ":8811"
-const STATIC_FILE_ROOT = "C:/workspace/ict/gitsvn/ictinv-ui-svcmgt/dist"
-const STATIC_FILE_INDEX = STATIC_FILE_ROOT + "/index.html"
-
 func main() {
 	initHandlers()
 	startServ()
@@ -24,14 +21,16 @@ func main() {
 func initHandlers() {
 	//fileSvr := http.FileServer(http.Dir("C:/workspace/ict/gitsvn/ictinv-ui-svcmgt/dist"))
 
-	//http.Handle("/", interceptHandler(fileSvr, defaultErrorHandler))
-	http.HandleFunc("/api/list", fake_dir_list)
+	//	http.Handle("/", interceptHandler(fileSvr, defaultErrorHandler))
+	http.Handle("/api/list", RequestLogInterceptor{handle: dir_list})
+	http.Handle("/api/file", RequestLogInterceptor{handle: fake_download_file})
 	//http.HandleFunc("/api/", handleRequest_list)
 }
 
 func startServ() {
-	log.Printf("Started serve on %v...", SERVE)
-	log.Fatal(http.ListenAndServe(":8811", nil))
+	port := GetServerPort()
+	log.Printf("Started serve on %v...", port)
+	log.Fatal(http.ListenAndServe(port, nil))
 }
 
 func handleRequest_api(w http.ResponseWriter, req *http.Request) {
@@ -89,8 +88,7 @@ func handleFile(w http.ResponseWriter, filename string) {
 	log.Print("Content-Type: ", ctype)
 
 	defer f.Close()
-	reader := bufio.NewReader(f)
-	io.Copy(w, reader)
+	io.Copy(w, f)
 }
 
 // https://gist.github.com/nhooyr/076c397a761fefded1e580c837c528ea
@@ -137,4 +135,10 @@ func interceptHandler(next http.Handler, errH ErrorHandler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		next.ServeHTTP(&interceptResponseWriter{w, errH}, r)
 	})
+}
+
+func ReturnJson(w http.ResponseWriter, data interface{}) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	bytes, _ := json.Marshal(data)
+	w.Write(bytes)
 }
