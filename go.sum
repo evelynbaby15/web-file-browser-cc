@@ -1,0 +1,11 @@
+github.com/onrik/logrus v0.0.0-20180801161715-ca0a758702be/go.mod h1:qfe9NeZVAJfIxviw3cYkZo3kvBtLoPRJriAO8zl7qTk=
+github.com/sirupsen/logrus v1.0.6 h1:hcP1GmhGigz/O7h1WVUM5KklBp1JoNS9FggWKdj/j3s=
+github.com/sirupsen/logrus v1.0.6/go.mod h1:pMByvHTf9Beacp5x1UXfOR9xyW/9antXMhjMPG0dEzc=
+gitlab.com/simiecc/pi/clog v0.0.0-20180909102330-36b0eff47446 h1:e476xH+4NLVw8fc3Vprpzr0e/zhySMCHhfJgugqw17U=
+gitlab.com/simiecc/pi/clog v0.0.0-20180909102330-36b0eff47446/go.mod h1:LYgFb1tIP5M4qURDlIb1lZ3pR7k5u2Eg+5xLgdHrp+w=
+gitlab.com/simiecc/pi/clog v0.0.0-20181028092035-0743e8a3de12 h1:Hxtj2wJnpQ2zOtFOBQhUvcNQulJXSZDjKXLEJ94u910=
+gitlab.com/simiecc/pi/clog v0.0.0-20181028092035-0743e8a3de12/go.mod h1:LYgFb1tIP5M4qURDlIb1lZ3pR7k5u2Eg+5xLgdHrp+w=
+golang.org/x/crypto v0.0.0-20180830192347-182538f80094 h1:rVTAlhYa4+lCfNxmAIEOGQRoD23UqP72M3+rSWVGDTg=
+golang.org/x/crypto v0.0.0-20180830192347-182538f80094/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
+golang.org/x/sys v0.0.0-20180831094639-fa5fdf94c789 h1:T8D7l6WB3tLu+VpKvw06ieD/OhBi1XpJmG1U/FtttZg=
+golang.org/x/sys v0.0.0-20180831094639-fa5fdf94c789/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=

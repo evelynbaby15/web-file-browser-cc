@@ -2,16 +2,15 @@ package main
 
 import (
 	"io"
-	"log"
 	"net/http"
 	"os"
+
+	"gitlab.com/simiecc/pi/clog"
 
 	"time"
 )
 
 func fake_dir_list(w http.ResponseWriter, req *http.Request) {
-	log.Print("in dir_list")
-
 	data := DirList{
 		CommonResponse: CommonResponse{Status: 200, Msg: ""},
 		Files: []DirFile{
@@ -23,7 +22,7 @@ func fake_dir_list(w http.ResponseWriter, req *http.Request) {
 func fake_download_file(w http.ResponseWriter, req *http.Request) {
 	file, err := os.Open("./assets/test.txt")
 	if err != nil {
-		log.Print("Error: open file", err)
+		clog.Error("Error: open file", err)
 		w.Write([]byte("error response"))
 		return
 	}
@@ -35,7 +34,7 @@ func fake_download_file(w http.ResponseWriter, req *http.Request) {
 
 	_, err = io.Copy(w, file)
 	if err != nil {
-		log.Print("Error: write file", err)
+		clog.Error("Error: write file", err)
 		w.Write([]byte("error response"))
 		return
 	}
