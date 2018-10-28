@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FileModel, FileItem } from '../file-model';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-file-browser',
@@ -18,15 +19,19 @@ export class FileBrowserComponent implements OnInit {
   constructor(private httpClient: HttpClient) { }
 
   ngOnInit() {
-    this.retrieveData();
+    if (environment.data) {
+      this.data = environment.data;
+    } else {
+      this.retrieveData();
+    }
     // this.data = JSON.parse('{"status":200,"msg":"","files":[{"type":"D","name":"test_dir","size":0,"modified":1540606706000},{"type":"F","name":"file.txt","size":205,"modified":1540606806003}]}');
   }
 
 
   retrieveData() {
-    this.httpClient.get<FileModel>(this.dataSourceURL + '?path=a')
+    this.httpClient.get(this.dataSourceURL + '?path=a')
       .subscribe(
-        val => { this.data = val; console.log(val); }
+        (val: FileModel) => { this.data = val; console.log(val); }
       );
     this.currentPath = 'a'; // FIXME
   }
