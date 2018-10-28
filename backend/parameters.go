@@ -26,12 +26,9 @@ var p_debug bool
 var p_serveroots arrayFlags
 var p_serveroots_parsed []DirRoot = nil
 
-//const STATIC_FILE_ROOT = "C:/workspace/ict/gitsvn/ictinv-ui-svcmgt/dist"
-//const STATIC_FILE_INDEX = STATIC_FILE_ROOT + "/index.html"
-
 func InitProgramArgs() {
 	flag.StringVar(&p_port, "p", "8800", "Specify server list port")
-	flag.StringVar(&p_static_root, "root", "./dist/", "Specify UI files root directory")
+	flag.StringVar(&p_static_root, "root", "../frontend/dist/", "Specify UI files root directory")
 	flag.StringVar(&p_static_index, "index", "index.html", "Specifiy index filename in {root}")
 	flag.BoolVar(&p_debug, "d", false, "Debug mode")
 	flag.Var(&p_serveroots, "r", "Serve root directories(format: \"alias:directory\", multiple is acceptable).")
@@ -71,7 +68,8 @@ func GetFileBrowserRoots() []DirRoot {
 }
 
 func parseBrowserRoot() {
-
+	p_serveroots_parsed = []DirRoot{}
+	// TODO parse p_serveroots to type DirRoot, and save to p_serveroots_parsed
 }
 
 func GetFileBrowserRoot(root string) (DirRoot, error) {
