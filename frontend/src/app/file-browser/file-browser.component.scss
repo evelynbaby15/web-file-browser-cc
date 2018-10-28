@@ -1,0 +1,27 @@
+table, th, td{
+  border: 1px solid #2f2f2f;
+}
+
+.dir::before {
+  content: "▲";
+}
+
+
+// a {
+//   text-decoration: none;
+// }
+
+// a:link {
+//   color: goldenrod;
+
+// }
+
+// a:visited {
+//   color: goldenrod;
+// }
+
+
+.size {
+  text-align: right;
+
+}
