@@ -182,4 +182,23 @@ export class FileBrowserComponent implements OnInit {
     // );
   }
 
+
+  downloadFile() {
+    this.httpClient.get('http://192.168.1.111:8811/api/file' + '?path=a/package.json',
+    {/*observe: 'response',*/ responseType: 'blob'}).subscribe(
+      (res: Blob) => {
+        console.log(res);
+        var url = window.URL.createObjectURL(res);
+        var a = document.createElement('a');
+        document.body.appendChild(a);
+        a.setAttribute('style', 'display: none');
+        a.href = url;
+        a.download = 'testxxx'; // TODO file name
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove(); // remove the element
+      }
+    );
+
+  }
 }
