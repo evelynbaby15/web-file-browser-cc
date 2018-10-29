@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"encoding/json"
-	"flag"
+
 	"fmt"
 	"io"
 	"mime"
@@ -21,12 +21,21 @@ func init() {
 }
 
 func main() {
-	InitProgramArgs()
-	flag.Parse()
-
+	initProgramArgs()
+	logParameters()
 	initHandlers()
 	startServ()
+}
 
+func logParameters() {
+	clog.Infof("Static root: %v", GetStaticRoot())
+
+	clog.Info("Serve roots:")
+
+	roots := GetFileBrowserRoots()
+	for _, r := range roots {
+		clog.Infof("    %v - %v", r.Alias, r.Path)
+	}
 }
 
 func initHandlers() {

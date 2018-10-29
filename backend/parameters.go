@@ -3,6 +3,9 @@ package main
 import (
 	"errors"
 	"flag"
+	"strings"
+
+	"gitlab.com/simiecc/pi/clog"
 )
 
 // types from
@@ -26,12 +29,14 @@ var p_debug bool
 var p_serveroots arrayFlags
 var p_serveroots_parsed []DirRoot = nil
 
-func InitProgramArgs() {
+func initProgramArgs() {
 	flag.StringVar(&p_port, "p", "8800", "Specify server list port")
 	flag.StringVar(&p_static_root, "root", "../frontend/dist/", "Specify UI files root directory")
 	flag.StringVar(&p_static_index, "index", "index.html", "Specifiy index filename in {root}")
 	flag.BoolVar(&p_debug, "d", false, "Debug mode")
 	flag.Var(&p_serveroots, "r", "Serve root directories(format: \"alias:directory\", multiple is acceptable).")
+
+	flag.Parse()
 }
 
 func GetDebug() bool {
@@ -69,7 +74,15 @@ func GetFileBrowserRoots() []DirRoot {
 
 func parseBrowserRoot() {
 	p_serveroots_parsed = []DirRoot{}
-	// TODO parse p_serveroots to type DirRoot, and save to p_serveroots_parsed
+	for _, rstr := range p_serveroots {
+		index := strings.Index(rstr, ":")
+		if index == -1 {
+			clog.Errorf("Invalid root config: %v", rstr)
+		}
+
+		cfg := DirRoot{Alias: rstr[:index], Path: rstr[index+1:]}
+		p_serveroots_parsed = append(p_serveroots_parsed, cfg)
+	}
 }
 
 func GetFileBrowserRoot(root string) (DirRoot, error) {
