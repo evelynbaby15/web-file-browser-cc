@@ -23,7 +23,7 @@ func (this RequestLogInterceptor) ServeHTTP(w http.ResponseWriter, r *http.Reque
 
 	elapsed := time.Since(start)
 
-	clog.Infof("[Request] %v %v (%v) %v", r.Method, r.URL, *wrapped.finalStatus, asMs(elapsed))
+	clog.Infof("[Request] %v %v (%v) %v [%v]", r.Method, r.URL, *wrapped.finalStatus, asMs(elapsed), r.RemoteAddr)
 }
 
 func asMs(d time.Duration) string {
