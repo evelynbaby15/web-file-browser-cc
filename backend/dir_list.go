@@ -10,6 +10,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/go-chi/chi"
 	"gitlab.com/simiecc/pi/clog"
 
 	"strings"
@@ -24,16 +25,15 @@ func debug_header(w http.ResponseWriter) {
 }
 
 func dir_list(w http.ResponseWriter, req *http.Request) {
-	if req.Method == "GET" {
-		dir_list_get(w, req)
-	} else {
-		ReturnMethodNotAllowed(w)
-	}
+	dir_list_get(w, req)
 }
 
 func dir_list_get(w http.ResponseWriter, req *http.Request) {
 
 	//time.Sleep(2 * time.Second)
+
+	val := req.Context().Value("path").(string)
+	clog.Print("val is", val)
 
 	filepath, err := getRequestParam(req, "path")
 	if err != nil {

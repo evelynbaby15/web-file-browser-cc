@@ -12,6 +12,9 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
 	"gitlab.com/simiecc/pi/clog"
 )
 
@@ -23,8 +26,8 @@ func init() {
 func main() {
 	initProgramArgs()
 	logParameters()
-	initHandlers()
-	startServ()
+	r := initHandlers()
+	startServ(r)
 }
 
 func logParameters() {
@@ -38,23 +41,45 @@ func logParameters() {
 	}
 }
 
-func initHandlers() {
+func initHandlers() *chi.Mux {
+	r := chi.NewRouter()
+
+	// cors config
+	if GetDebug() {
+		// Basic CORS
+		// for more ideas, see: https://developer.github.com/v3/#cross-origin-resource-sharing
+		cors := cors.New(cors.Options{
+			// AllowedOrigins: []string{"https://foo.com"}, // Use this to allow specific origin hosts
+			AllowedOrigins: []string{"*"},
+		})
+		r.Use(cors.Handler)
+	}
+
+	// A good base middleware stack
+	r.Use(middleware.RequestID)
+	r.Use(middleware.RealIP)
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+
+	r.Get("/api/list", dir_list)
+
 	//fileSvr := http.FileServer(http.Dir("C:/workspace/ict/gitsvn/ictinv-ui-svcmgt/dist"))
 
 	//	http.Handle("/", interceptHandler(fileSvr, defaultErrorHandler))
-	http.Handle("/api/list", RequestLogInterceptor{handle: dir_list})
+	//http.Handle("/api/list", RequestLogInterceptor{handle: dir_list})
 	//http.Handle("/api/file", RequestLogInterceptor{handle: fake_download_file})
-	http.Handle("/api/file", RequestLogInterceptor{handle: dir_get_file})
+	//http.Handle("/api/file", RequestLogInterceptor{handle: dir_get_file})
 	//http.HandleFunc("/api/", handleRequest_list)
+	return r
 }
 
-func startServ() {
+func startServ(r *chi.Mux) {
 	if GetDebug() {
 		clog.Info("Debug mode ON")
 	}
 	port := GetServerPort()
 	clog.Infof("Starting server on %v...", port)
-	clog.Error(http.ListenAndServe(port, nil))
+	clog.Error(http.ListenAndServe(port, r))
 }
 
 func handleRequest_api(w http.ResponseWriter, req *http.Request) {
