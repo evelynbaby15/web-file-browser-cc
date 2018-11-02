@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"encoding/json"
 
 	"fmt"
@@ -61,11 +60,13 @@ func initHandlers() *chi.Mux {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
-	r.Get("/api/list", dir_list)
+	fileSvr := http.FileServer(http.Dir(GetStaticRoot()))
 
-	//fileSvr := http.FileServer(http.Dir("C:/workspace/ict/gitsvn/ictinv-ui-svcmgt/dist"))
+	r.Mount("/", interceptHandler(fileSvr, defaultErrorHandler))
 
-	//	http.Handle("/", interceptHandler(fileSvr, defaultErrorHandler))
+	r.Get("/api/list", dir_list_get)
+	r.Get("/api/file", dir_get_file_get)
+
 	//http.Handle("/api/list", RequestLogInterceptor{handle: dir_list})
 	//http.Handle("/api/file", RequestLogInterceptor{handle: fake_download_file})
 	//http.Handle("/api/file", RequestLogInterceptor{handle: dir_get_file})
@@ -80,22 +81,6 @@ func startServ(r *chi.Mux) {
 	port := GetServerPort()
 	clog.Infof("Starting server on %v...", port)
 	clog.Error(http.ListenAndServe(port, r))
-}
-
-func handleRequest_api(w http.ResponseWriter, req *http.Request) {
-	clog.Print("Request ", req.Method, " ", req.URL)
-
-	f, err := os.Open("C:/data-delete.xml")
-	if err != nil {
-		w.Write([]byte(fmt.Sprintf("Error: %v", err)))
-		return
-	}
-
-	defer f.Close()
-	reader := bufio.NewReader(f)
-	io.Copy(w, reader)
-
-	//w.Write([]byte("123123"))
 }
 
 // The algorithm uses at most sniffLen bytes to make its decision.
@@ -185,6 +170,7 @@ func interceptHandler(next http.Handler, errH ErrorHandler) http.Handler {
 		errH = defaultErrorHandler
 	}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		clog.Print("test123123")
 		next.ServeHTTP(&interceptResponseWriter{w, errH}, r)
 	})
 }

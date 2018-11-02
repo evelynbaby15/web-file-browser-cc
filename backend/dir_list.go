@@ -10,7 +10,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/go-chi/chi"
 	"gitlab.com/simiecc/pi/clog"
 
 	"strings"
@@ -24,23 +23,17 @@ func debug_header(w http.ResponseWriter) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 }
 
-func dir_list(w http.ResponseWriter, req *http.Request) {
-	dir_list_get(w, req)
-}
-
 func dir_list_get(w http.ResponseWriter, req *http.Request) {
 
 	//time.Sleep(2 * time.Second)
 
-	val := req.Context().Value("path").(string)
-	clog.Print("val is", val)
+	//	val := req.Context().Value("path").(string)
 
 	filepath, err := getRequestParam(req, "path")
 	if err != nil {
-		filepath = ""
-		//		clog.Error("Error: fail parse 'path'", err)
-		//		defaultErrorResult(w)
-		//		return
+		clog.Error("Error: fail parse 'path'", err)
+		defaultErrorResult(w)
+		return
 	}
 
 	if strings.HasPrefix(filepath, "/") {
