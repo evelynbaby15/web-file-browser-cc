@@ -170,7 +170,6 @@ func interceptHandler(next http.Handler, errH ErrorHandler) http.Handler {
 		errH = defaultErrorHandler
 	}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		clog.Print("test123123")
 		next.ServeHTTP(&interceptResponseWriter{w, errH}, r)
 	})
 }
