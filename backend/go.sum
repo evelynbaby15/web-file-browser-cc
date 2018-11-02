@@ -3,8 +3,12 @@ github.com/go-chi/chi v3.3.3+incompatible/go.mod h1:eB3wogJHnLi3x/kFX2A+IbTBlXxm
 github.com/go-chi/cors v1.0.0 h1:e6x8k7uWbUwYs+aXDoiUzeQFT6l0cygBYyNhD7/1Tg0=
 github.com/go-chi/cors v1.0.0/go.mod h1:K2Yje0VW/SJzxiyMYu6iPQYa7hMjQX2i/F491VChg1I=
 github.com/onrik/logrus v0.0.0-20180801161715-ca0a758702be/go.mod h1:qfe9NeZVAJfIxviw3cYkZo3kvBtLoPRJriAO8zl7qTk=
+github.com/simie-cc/golib/clog v0.0.0-20181102065150-2ab683f253cc h1:o5E932liblhGKSULGW+qrBhFtBVziX60lz9j7o2SGzM=
+github.com/simie-cc/golib/clog v0.0.0-20181102065150-2ab683f253cc/go.mod h1:JWa2CGjm8dsrgJCtiNBicQBIG+WeTabEsVlkP2KjcL4=
 github.com/sirupsen/logrus v1.0.6 h1:hcP1GmhGigz/O7h1WVUM5KklBp1JoNS9FggWKdj/j3s=
 github.com/sirupsen/logrus v1.0.6/go.mod h1:pMByvHTf9Beacp5x1UXfOR9xyW/9antXMhjMPG0dEzc=
+gitlab.com/simiecc/golib/clog v0.0.0-20181102065738-8d7f870c1d35 h1:7rXk9B6joc+zsmh1tsm5BF0bl1vkT549JUAB9S+M/ck=
+gitlab.com/simiecc/golib/clog v0.0.0-20181102065738-8d7f870c1d35/go.mod h1:jKpmY8ZBtvqdFQoXUUwrIX+nphV9avNCiQ+0KrH1o44=
 gitlab.com/simiecc/pi/clog v0.0.0-20180909102330-36b0eff47446 h1:e476xH+4NLVw8fc3Vprpzr0e/zhySMCHhfJgugqw17U=
 gitlab.com/simiecc/pi/clog v0.0.0-20180909102330-36b0eff47446/go.mod h1:LYgFb1tIP5M4qURDlIb1lZ3pR7k5u2Eg+5xLgdHrp+w=
 gitlab.com/simiecc/pi/clog v0.0.0-20181028092035-0743e8a3de12 h1:Hxtj2wJnpQ2zOtFOBQhUvcNQulJXSZDjKXLEJ94u910=

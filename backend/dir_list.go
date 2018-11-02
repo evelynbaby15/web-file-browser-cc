@@ -10,7 +10,7 @@ import (
 	"os"
 	"time"
 
-	"gitlab.com/simiecc/pi/clog"
+	"gitlab.com/simiecc/golib/clog"
 
 	"strings"
 )

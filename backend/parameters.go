@@ -5,7 +5,7 @@ import (
 	"flag"
 	"strings"
 
-	"gitlab.com/simiecc/pi/clog"
+	"gitlab.com/simiecc/golib/clog"
 )
 
 // types from
@@ -31,7 +31,7 @@ var p_serveroots_parsed []DirRoot = nil
 
 func initProgramArgs() {
 	flag.StringVar(&p_port, "p", "8800", "Specify server list port")
-	flag.StringVar(&p_static_root, "root", "../frontend/dist/", "Specify UI files root directory")
+	flag.StringVar(&p_static_root, "root", "./dist/", "Specify UI files root directory")
 	flag.StringVar(&p_static_index, "index", "index.html", "Specifiy index filename in {root}")
 	flag.BoolVar(&p_debug, "d", false, "Debug mode")
 	flag.Var(&p_serveroots, "r", "Serve root directories(format: \"alias:directory\", multiple is acceptable).")

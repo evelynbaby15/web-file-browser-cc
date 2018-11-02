@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"gitlab.com/simiecc/pi/clog"
+	"gitlab.com/simiecc/golib/clog"
 
 	"time"
 )

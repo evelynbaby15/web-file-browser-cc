@@ -6,7 +6,7 @@ import (
 
 	"time"
 
-	"gitlab.com/simiecc/pi/clog"
+	"gitlab.com/simiecc/golib/clog"
 )
 
 type RequestLogInterceptor struct {

@@ -14,7 +14,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
-	"gitlab.com/simiecc/pi/clog"
+	"gitlab.com/simiecc/golib/clog"
 )
 
 func init() {
@@ -30,6 +30,10 @@ func main() {
 }
 
 func logParameters() {
+	if GetDebug() {
+		clog.Info("Debug mode ON")
+	}
+
 	clog.Infof("Static root: %v", GetStaticRoot())
 
 	clog.Info("Serve roots:")
@@ -75,9 +79,7 @@ func initHandlers() *chi.Mux {
 }
 
 func startServ(r *chi.Mux) {
-	if GetDebug() {
-		clog.Info("Debug mode ON")
-	}
+
 	port := GetServerPort()
 	clog.Infof("Starting server on %v...", port)
 	clog.Error(http.ListenAndServe(port, r))
