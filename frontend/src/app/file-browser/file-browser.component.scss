@@ -1,35 +1,68 @@
+@import url('https://fonts.googleapis.com/css?family=Muli:400,700,900');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Muli', sans-serif;
+  margin: 0;
+}
+
 .browser__div {
   width: 100%;
 }
 
-table, th, td{
-  border: 1px solid #2f2f2f;
+input {
+  width: 70%;
+  padding: 8px 12px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  margin: 0 6px;
 }
 
-table tr {
+table {
+  font-family: 'Muli', sans-serif;
+  border-collapse: collapse;
   width: 100%;
+}
+
+th, td{
+  border: 1px solid #2f2f2f;
+  padding: 0.5rem;
 }
 
 .dir::after {
   content: "▲";
+  color: #1ba4b6;
+}
+
+a, button {
+  min-width: 48px;
+  min-height: 48px;
+  cursor: pointer;
+}
+
+th a {
+  text-decoration: none;
+  color: #1ba4b6;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+td a:hover {
+  background: #32b7b2;
+  text-decoration: underline;
+}
+
+a:link {
+}
+
+a:visited {
+  //color: goldenrod;
 }
 
 
-// a {
-//   text-decoration: none;
-// }
-
-// a:link {
-//   color: goldenrod;
-
-// }
-
-// a:visited {
-//   color: goldenrod;
-// }
-
-
-.size {
+.data__fileSize--align {
   text-align: right;
-
 }
