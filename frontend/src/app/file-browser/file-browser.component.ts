@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
 export class FileBrowserComponent implements OnInit {
   data: FileModel;
   currentSortColumn: string;
-  currentPath = 'a';
+  currentPath = 'data';
   sortDirection = true;
 
   dataSourceURL = '/api';
@@ -30,20 +30,27 @@ export class FileBrowserComponent implements OnInit {
 
 
   retrieveData() {
-    this.httpClient.get(this.dataSourceURL + '/list?path=a')
+    const path = this.dataSourceURL + '/list?path=' + this.currentPath;
+    this.getData(path);
+
+  }
+
+  getData(path: string) {
+    this.httpClient.get(path)
       .subscribe(
         (val: FileModel) => { this.data = val; console.log(val); }
       );
-    this.currentPath = 'data'; // FIXME Set default current path when app is init to get data.
+    //this.currentPath = path;
   }
 
   goToDir(dirName: string) {
     console.log('Go to dir:', dirName);
     const path = this.dataSourceURL + '/list?path=' + this.currentPath + '/' + dirName;
-    this.httpClient.get(path)
-      .subscribe(
-        (val: FileModel) => { this.data = val; console.log(val); }
-      );
+    this.getData(path);
+    // this.httpClient.get(path)
+    //   .subscribe(
+    //     (val: FileModel) => { this.data = val; console.log(val); }
+    //   );
     this.currentPath = dirName;
   }
 
