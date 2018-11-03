@@ -1,12 +1,18 @@
 
-# web-file-browser - An frontend of angular6 + Go backend file browser
+# web-file-browser - An web-based file browser made by Angular6(frontend) + Go(backend)
 
-## Backend command parameters
+## command parameters
 
 - `-d`: Debug mode
 - `-p`: Listen port (default to 80)
 - `-r`: Serve roots (multiple times are allowed)
 
 	Format: (alias):(directory path)
-	For example: -r movies:/path/to/folder/something
+	For example: -r dirname:/path/to/folder/something
 
+## Docker build instruction
+
+- `docker build -t web-file-browser .`
+- ```docker run -d \
+	-p 8800:8800 -v /path/to/data:/data
+	```

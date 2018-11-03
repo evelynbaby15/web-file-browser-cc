@@ -1,11 +1,11 @@
 # build backend
-FROM golang:1.11 AS build-env
+FROM golang:1.11 AS build-backend
 ADD backend /src
 RUN cd /src && GOOS=linux GOARCH=amd64 go build -o app
 
 # build frontend
 FROM node:10.13-alpine AS build-frontend
-ADD frontend /src
+ADD frontend/ /src
 RUN cd /src && npm install && npm run build-prod
 
 # final stage
@@ -19,7 +19,7 @@ ENV ARGS ""
 WORKDIR /app
 
 COPY run.sh /app/
-COPY --from=build-env /src/app /app/
+COPY --from=build-backend  /src/app /app/
 COPY --from=build-frontend /src/dist /app/dist/
 
 ENTRYPOINT ["sh", "./run.sh"]

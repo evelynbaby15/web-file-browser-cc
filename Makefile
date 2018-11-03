@@ -1,12 +1,6 @@
-all: frontend backend
+all: FORCE
+	docker build -t simiecc/web-file-browser .
 
 FORCE:
 
-frontend: FORCE
-	$(MAKE) -C ./frontend $(MAKECMDGOALS)
-
-backend: FORCE
-	$(MAKE) -C ./backend $(MAKECMDGOALS)
-
 clean: frontend backend
-
