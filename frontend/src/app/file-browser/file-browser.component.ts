@@ -14,7 +14,7 @@ export class FileBrowserComponent implements OnInit {
   currentPath = 'a';
   sortDirection = true;
 
-  dataSourceURL = 'http://192.168.1.111:8811/api';
+  dataSourceURL = '/api';
   // listDataURL = this.dataSourceURL + '/list?path='; // TODO : How to use string interpolation to foramt this URL?
 
   constructor(private httpClient: HttpClient) { }
@@ -34,7 +34,7 @@ export class FileBrowserComponent implements OnInit {
       .subscribe(
         (val: FileModel) => { this.data = val; console.log(val); }
       );
-    this.currentPath = 'a'; // FIXME Set default current path when app is init to get data.
+    this.currentPath = 'data'; // FIXME Set default current path when app is init to get data.
   }
 
   goToDir(dirName: string) {
