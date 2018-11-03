@@ -11,10 +11,11 @@ import { environment } from 'src/environments/environment';
 export class FileBrowserComponent implements OnInit {
   data: FileModel;
   currentSortColumn: string;
-  currentPath: string;
+  currentPath = 'a';
   sortDirection = true;
 
-  dataSourceURL = 'http://192.168.1.111:8811/api/list';
+  dataSourceURL = 'http://192.168.1.111:8811/api';
+  // listDataURL = this.dataSourceURL + '/list?path='; // TODO : How to use string interpolation to foramt this URL?
 
   constructor(private httpClient: HttpClient) { }
 
@@ -29,11 +30,21 @@ export class FileBrowserComponent implements OnInit {
 
 
   retrieveData() {
-    this.httpClient.get(this.dataSourceURL + '?path=a')
+    this.httpClient.get(this.dataSourceURL + '/list?path=a')
       .subscribe(
         (val: FileModel) => { this.data = val; console.log(val); }
       );
-    this.currentPath = 'a'; // FIXME
+    this.currentPath = 'a'; // FIXME Set default current path when app is init to get data.
+  }
+
+  goToDir(dirName: string) {
+    console.log('Go to dir:', dirName);
+    const path = this.dataSourceURL + '/list?path=' + this.currentPath + '/' + dirName;
+    this.httpClient.get(path)
+      .subscribe(
+        (val: FileModel) => { this.data = val; console.log(val); }
+      );
+    this.currentPath = dirName;
   }
 
   sortColByFileName(event: Event) {
@@ -44,7 +55,7 @@ export class FileBrowserComponent implements OnInit {
 
     if (colTag === this.currentSortColumn) {
       fileItems.reverse();
-      this.sortDirection =  !this.sortDirection;
+      this.sortDirection = !this.sortDirection;
       return;
     }
 
@@ -165,40 +176,39 @@ export class FileBrowserComponent implements OnInit {
   }
   */
 
-  goToDirOrDownload(event: Event, type: string, path: string) {
+  goToDirOrDownload(event: Event, type: string, fileName: string) {
     event.preventDefault();
 
+    // 'D': Go to directory
     if (type === 'D') {
-      this.currentPath = path;
-      // TODO
+      this.goToDir(fileName);
     } else {
-      // type === 'F' means need to download file
-      confirm('Do you really want to donwload file: ' + path + ' ?');
-      // TODO
+      // 'F': download file
+      confirm('Do you really want to donwload the file: ' + fileName + ' ?');
+      this.downloadFile(fileName);
     }
-    // this.httpClient.get<FileModel>(this.dataSourceURL + '?path=' + dir)
-    // .subscribe(
-    //   val => { this.data = val; console.log(val); }
-    // );
   }
 
 
-  downloadFile() {
-    this.httpClient.get('http://192.168.1.111:8811/api/file' + '?path=a/package.json',
-    {/*observe: 'response',*/ responseType: 'blob'}).subscribe(
-      (res: Blob) => {
-        console.log(res);
-        var url = window.URL.createObjectURL(res);
-        var a = document.createElement('a');
-        document.body.appendChild(a);
-        a.setAttribute('style', 'display: none');
-        a.href = url;
-        a.download = 'testxxx'; // TODO file name
-        a.click();
-        window.URL.revokeObjectURL(url);
-        a.remove(); // remove the element
-      }
-    );
+  downloadFile(fileName: string) {
+    // this.httpClient.get(this.dataSourceURL + '/file?path=a/package.json',
+    const filePath = this.dataSourceURL + '/file?path=' + this.currentPath + '/' + fileName;
+    console.log('download file: ', filePath);
+    this.httpClient.get(filePath,
+      {/*observe: 'response',*/ responseType: 'blob' }).subscribe(
+        (res: Blob) => {
+          console.log(res);
+          const url = window.URL.createObjectURL(res);
+          const a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.href = url;
+          a.download = fileName; // download file naming.
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove(); // remove the element
+        }
+      );
 
   }
 }
