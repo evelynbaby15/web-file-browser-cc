@@ -74,6 +74,11 @@ func GetFileBrowserRoots() []DirRoot {
 
 func parseBrowserRoot() {
 	p_serveroots_parsed = []DirRoot{}
+	if len(p_serveroots) == 0 {
+		p_serveroots_parsed = append(p_serveroots_parsed, DirRoot{Alias: "data", Path: "/data"})
+		return
+	}
+
 	for _, rstr := range p_serveroots {
 		index := strings.Index(rstr, ":")
 		if index == -1 {
