@@ -38,14 +38,15 @@ export class FileBrowserComponent implements OnInit {
   getData(path: string) {
     this.httpClient.get(path)
       .subscribe(
-        (val: FileModel) => { this.data = val; console.log(val); }
+        (val: FileModel) => { this.data = val; console.log('parent:', val.parent, ', path:', val.path); }
       );
     //this.currentPath = path;
   }
 
   goToDir(dirName: string) {
+    event.preventDefault();
     console.log('Go to dir:', dirName);
-    const path = this.dataSourceURL + '/list?path=' + this.currentPath + '/' + dirName;
+    const path = this.dataSourceURL + '/list?path=' + dirName;
     this.getData(path);
     // this.httpClient.get(path)
     //   .subscribe(
@@ -165,34 +166,18 @@ export class FileBrowserComponent implements OnInit {
     this.currentSortColumn = 'date';
   }
 
-  /*
-  compareString(a: FileItem, b: FileItem, column: string) {
-    const nameA = a[column].toUpperCase();
-    const nameB = b[column].toUpperCase();
-
-    if (nameA === nameB) {
-      return 0;
-    }
-
-    const compare = (nameA < nameB);
-    if (compare) {
-      return -1;
-    } else {
-      return 1;
-    }
-  }
-  */
-
   goToDirOrDownload(event: Event, type: string, fileName: string) {
     event.preventDefault();
 
     // 'D': Go to directory
     if (type === 'D') {
-      this.goToDir(fileName);
+      this.goToDir(this.currentPath + '/' + fileName);
     } else {
       // 'F': download file
-      confirm('Do you really want to donwload the file: ' + fileName + ' ?');
-      this.downloadFile(fileName);
+      const r: boolean = confirm('Do you really want to donwload the file: ' + fileName + ' ?');
+      if (r) {
+        this.downloadFile(fileName);
+      }
     }
   }
 

@@ -1,6 +1,8 @@
 export class FileModel {
   status: number;
   msg: string;
+  parent: string;
+  path: string;
   files: FileItem[];
 }
 

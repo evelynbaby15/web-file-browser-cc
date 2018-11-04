@@ -1,13 +1,21 @@
 <div class="browser__div">
   <!-- TODO : input file path validator -->
-  PATH: <input type="text" name="currentPath" value="{{ currentPath }}" #path/><button (click)="goToDir(path.value)">Go</button>
-  <hr>
+  PATH: <input type="text"
+    name="currentPath"
+    value="{{ currentPath }}"
+    (keyup.enter)="goToDir(path.value)" #path/><button (click)="goToDir(path.value)">Go</button>
+
+    <hr>
   <table *ngIf="data">
     <tr>
       <th><a href="" (click)="sortColByType($event)">檔案或目錄</a></th>
       <th [ngClass]="{'dir': sortDirection}"><a href="" (click)="sortColByFileName($event)">檔案名稱</a></th>
       <th><a href="" (click)="sortColByFileSize($event)">檔案大小</a></th>
       <th><a href="" (click)="sortColByDate($event)">日期+時間</a></th>
+    </tr>
+    <tr *ngIf="data.parent">
+      <td>...</td>
+      <td colspan="3"><a href="" (click)="goToDir(data.parent)">回上一層</a></td>
     </tr>
     <tr *ngFor="let item of data.files">
       <td>{{ item.type }}</td>
