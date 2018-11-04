@@ -16,7 +16,7 @@
 
 - Build image
 
-	`docker build -t web-file-browser .`
+	`make`
 
 - Start image
 

@@ -1,7 +1,7 @@
 # build backend
 FROM golang:1.11 AS build-backend
 ADD backend /src
-RUN cd /src && GOOS=linux GOARCH=amd64 go build -o app
+RUN cd /src && GOOS=linux GOARCH=amd64 go build -o app -ldflags "-s -w"
 
 # build frontend
 FROM node:10.13-alpine AS build-frontend
