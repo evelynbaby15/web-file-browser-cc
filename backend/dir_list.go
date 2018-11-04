@@ -1,6 +1,8 @@
 package main
 
 import (
+	"path/filepath"
+
 	"errors"
 	"fmt"
 	"io"
@@ -29,22 +31,22 @@ func dir_list_get(w http.ResponseWriter, req *http.Request) {
 
 	//	val := req.Context().Value("path").(string)
 
-	filepath, err := getRequestParam(req, "path")
+	relpath, err := getRequestParam(req, "path")
 	if err != nil {
 		clog.Error("Error: fail parse 'path'", err)
 		defaultErrorResult(w)
 		return
 	}
 
-	if strings.HasPrefix(filepath, "/") {
-		filepath = filepath[1:]
+	if strings.HasPrefix(relpath, "/") {
+		relpath = relpath[1:]
 	}
 
 	var outputFiles []DirFile
-	if filepath == "" {
+	if relpath == "" {
 		outputFiles = getRootFileList()
 	} else {
-		outputFiles = getOsFileList(filepath)
+		outputFiles = getOsFileList(relpath)
 	}
 
 	if outputFiles == nil {
@@ -59,9 +61,18 @@ func dir_list_get(w http.ResponseWriter, req *http.Request) {
 	if req.Method == "HEAD" {
 		finalData = nil
 	} else {
+		parentPath := filepath.Join(relpath, "..")
+		if parentPath == "." || parentPath == ".." {
+			parentPath = ""
+		}
+
+		// XXX Windows workaround, prevent "\\" in path
+		parentPath = strings.Replace(parentPath, "\\", "/", -1)
+
 		finalData = &DirList{
 			CommonResponse: CommonResponse{Status: 200, Msg: ""},
-			Path:           filepath,
+			Path:           relpath,
+			ParentPath:     parentPath,
 			Files:          outputFiles}
 	}
 	ReturnJson(w, finalData)

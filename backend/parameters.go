@@ -85,7 +85,10 @@ func parseBrowserRoot() {
 			clog.Errorf("Invalid root config: %v", rstr)
 		}
 
-		cfg := DirRoot{Alias: rstr[:index], Path: rstr[index+1:]}
+		targetpath := rstr[index+1:]
+		targetpath = strings.Replace(targetpath, "\\", "/", -1)
+
+		cfg := DirRoot{Alias: rstr[:index], Path: targetpath}
 		p_serveroots_parsed = append(p_serveroots_parsed, cfg)
 	}
 }

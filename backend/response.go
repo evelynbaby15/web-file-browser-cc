@@ -30,6 +30,7 @@ type DirFile struct {
 
 type DirList struct {
 	CommonResponse
-	Path  string    `json:"path"`
-	Files []DirFile `json:"files"`
+	Path       string    `json:"path"`
+	ParentPath string    `json:"parent"`
+	Files      []DirFile `json:"files"`
 }
