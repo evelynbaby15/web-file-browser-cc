@@ -9,6 +9,17 @@ body {
   margin: 0;
 }
 
+.dir::after {
+  content: "▲";
+  color: #1ba4b6;
+}
+
+a, button {
+  min-width: 48px;
+  min-height: 48px;
+  cursor: pointer;
+}
+
 .browser__div {
   width: 100%;
 }
@@ -24,7 +35,8 @@ input {
 table {
   font-family: 'Muli', sans-serif;
   border-collapse: collapse;
-  width: 100%;
+  width: 88%;
+  margin: 0 auto;
 }
 
 th, td{
@@ -32,36 +44,24 @@ th, td{
   padding: 0.5rem;
 }
 
-.dir::after {
-  content: "▲";
-  color: #1ba4b6;
-}
-
-a, button {
-  min-width: 48px;
-  min-height: 48px;
-  cursor: pointer;
+th {
+  background: #1ba4b6;
 }
 
 th a {
   text-decoration: none;
-  color: #1ba4b6;
+  color: white;
   font-weight: bold;
   font-size: 1.1em;
 }
 
-td a:hover {
-  background: #32b7b2;
+th a:hover {
   text-decoration: underline;
 }
 
-a:link {
+th a:hover::after {
+  content: "^";
 }
-
-a:visited {
-  //color: goldenrod;
-}
-
 
 .data__fileSize--align {
   text-align: right;

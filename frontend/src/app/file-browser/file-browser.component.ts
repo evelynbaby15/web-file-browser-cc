@@ -32,7 +32,6 @@ export class FileBrowserComponent implements OnInit {
   retrieveData() {
     const path = this.dataSourceURL + '/list?path=' + this.currentPath;
     this.getData(path);
-
   }
 
   getData(path: string) {
