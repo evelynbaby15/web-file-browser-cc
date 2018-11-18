@@ -1,20 +1,18 @@
 <div class="browser__div">
   <!-- TODO : input file path validator -->
-  PATH: <input type="text"
-    name="currentPath"
-    value="{{ currentPath }}"
-    (keyup.enter)="goToDir(path.value)" #path/><button (click)="goToDir(path.value)">Go</button>
+  PATH: <input type="text" name="currentPath" value="{{ currentPath }}" (keyup.enter)="goToDir(path.value)" #path /><button
+    (click)="goToDir(path.value)">Go</button>
 
-    <hr>
+  <hr>
   <table *ngIf="data">
     <tr>
       <th>
-          <a href="" (click)="sortColByType($event)">檔案或目錄</a>
-          <span [ngClass]="{
+        <a href="" (click)="sortColByType($event)">種類</a>
+        <span [ngClass]="{
             'sort-dir-none': sortDirection == '0' && sortCol == 'type',
             'sort-dir-asc': sortDirection == '1' && sortCol == 'type',
             'sort-dir-desc': sortDirection == '2' && sortCol == 'type'}">
-          </span>
+        </span>
       </th>
       <th>
         <a href="" (click)="sortColByFileName($event)">檔案名稱</a>
@@ -33,12 +31,12 @@
         </span>
       </th>
       <th>
-          <a href="" (click)="sortColByDate($event)">日期+時間</a>
-          <span [ngClass]="{
+        <a href="" (click)="sortColByDate($event)">日期+時間</a>
+        <span [ngClass]="{
             'sort-dir-none': sortDirection == '0' && sortCol == 'date',
             'sort-dir-asc': sortDirection == '1' && sortCol == 'date',
             'sort-dir-desc': sortDirection == '2' && sortCol == 'date'}">
-          </span>
+        </span>
       </th>
     </tr>
     <tr *ngIf="data.parent">
@@ -46,13 +44,13 @@
       <td colspan="3"><a href="" (click)="goToDir(data.parent)">回上一層</a></td>
     </tr>
     <tr *ngFor="let item of data.files">
-      <td style="width: 8%;">
-        <div *ngIf="item.type == 'D'">
-          <img src="/assets/img/folder.png" width="30px" alt="folder"/>
+      <td>
+        <div *ngIf="item.type == 'D'" class="type-pic--center">
+          <img src="/assets/img/folder.png" width="30px" alt="folder" />
         </div>
-        <div *ngIf="item.type == 'F'">
-            <img src="/assets/img/file.png" width="30px" alt="file"/>
-          </div>
+        <div *ngIf="item.type == 'F'" class="type-pic--center">
+          <img src="/assets/img/file.png" width="30px" alt="file" />
+        </div>
         <!-- {{ item.type }} -->
       </td>
       <td><a href="" (click)="goToDirOrDownload($event, item.type, item.name)">{{ item.name }}</a></td>

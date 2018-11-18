@@ -9,12 +9,11 @@ body {
   margin: 0;
 }
 
-/* Sort direction */
-.dir::after {
-  content: "▲";
-  color: #1ba4b6;
+.browser__div {
+  width: 100%;
 }
 
+/* Sort direction */
 .sort-dir-none {
   display: none;
 }
@@ -24,8 +23,8 @@ body {
   height: 20px;
   display: inline-block;
   background-image: url(/assets/img/arrow-up.png);
-  // background-color: #2f2f2f;
   background-size: 20px;
+  margin: 0 10px -5px 2px;
 }
 
 .sort-dir-desc {
@@ -34,6 +33,7 @@ body {
   display: inline-block;
   background: url(/assets/img/arrow-down.png);
   background-size: 20px;
+  margin: 0 10px -5px 2px;
 }
 
 
@@ -44,9 +44,7 @@ a, button {
   cursor: pointer;
 }
 
-.browser__div {
-  width: 100%;
-}
+
 
 input {
   width: 70%;
@@ -64,13 +62,15 @@ table {
   margin: 0 auto;
 }
 
-th, td{
+td {
   border: 1px solid #2f2f2f;
-  padding: 0.5rem;
+  padding: 0.1rem 0.5rem;
 }
 
 th {
+  border: 1px solid #2f2f2f;
   background: #1ba4b6;
+  padding: 0.3rem;
 }
 
 th a {
@@ -82,6 +82,22 @@ th a {
 
 th a:hover {
   text-decoration: underline;
+}
+
+.type-pic--center {
+  text-align: center;
+}
+
+tr:nth-child(even) {
+  background: #f4f7ff;
+}
+
+tr:nth-child(odd) {
+  background: #fff;
+}
+
+tr:hover {
+  background: #f2f7b5;
 }
 
 // th a:hover::after {
