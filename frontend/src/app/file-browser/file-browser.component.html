@@ -8,10 +8,38 @@
     <hr>
   <table *ngIf="data">
     <tr>
-      <th><a href="" (click)="sortColByType($event)">檔案或目錄</a></th>
-      <th [ngClass]="{'dir': sortDirection}"><a href="" (click)="sortColByFileName($event)">檔案名稱</a></th>
-      <th><a href="" (click)="sortColByFileSize($event)">檔案大小</a></th>
-      <th><a href="" (click)="sortColByDate($event)">日期+時間</a></th>
+      <th>
+          <a href="" (click)="sortColByType($event)">檔案或目錄</a>
+          <span [ngClass]="{
+            'sort-dir-none': sortDirection == '0' && sortCol == 'type',
+            'sort-dir-asc': sortDirection == '1' && sortCol == 'type',
+            'sort-dir-desc': sortDirection == '2' && sortCol == 'type'}">
+          </span>
+      </th>
+      <th>
+        <a href="" (click)="sortColByFileName($event)">檔案名稱</a>
+        <span [ngClass]="{
+          'sort-dir-none': sortDirection == '0' && sortCol == 'fileName',
+          'sort-dir-asc': sortDirection == '1' && sortCol == 'fileName',
+          'sort-dir-desc': sortDirection == '2' && sortCol == 'fileName'}">
+        </span>
+      </th>
+      <th>
+        <a href="" (click)="sortColByFileSize($event)">檔案大小</a>
+        <span [ngClass]="{
+          'sort-dir-none': sortDirection == '0' && sortCol == 'size',
+          'sort-dir-asc': sortDirection == '1' && sortCol == 'size',
+          'sort-dir-desc': sortDirection == '2' && sortCol == 'size'}">
+        </span>
+      </th>
+      <th>
+          <a href="" (click)="sortColByDate($event)">日期+時間</a>
+          <span [ngClass]="{
+            'sort-dir-none': sortDirection == '0' && sortCol == 'date',
+            'sort-dir-asc': sortDirection == '1' && sortCol == 'date',
+            'sort-dir-desc': sortDirection == '2' && sortCol == 'date'}">
+          </span>
+      </th>
     </tr>
     <tr *ngIf="data.parent">
       <td>...</td>
@@ -20,10 +48,10 @@
     <tr *ngFor="let item of data.files">
       <td style="width: 8%;">
         <div *ngIf="item.type == 'D'">
-          <img src="../../assets/img/folder.png" width="30px" alt="folder"/>
+          <img src="/assets/img/folder.png" width="30px" alt="folder"/>
         </div>
         <div *ngIf="item.type == 'F'">
-            <img src="../../assets/img/file.png" width="30px" alt="file"/>
+            <img src="/assets/img/file.png" width="30px" alt="file"/>
           </div>
         <!-- {{ item.type }} -->
       </td>

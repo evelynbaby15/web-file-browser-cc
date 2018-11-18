@@ -10,9 +10,28 @@ import { environment } from 'src/environments/environment';
 })
 export class FileBrowserComponent implements OnInit {
   data: FileModel;
-  currentSortColumn: string;
   currentPath = 'data';
-  sortDirection = true;
+
+  // CSS sort direction
+  sortCol: string;
+  sortDirection = 0; // 預設的排序狀態為 0 (0: no sort, 1: asc, 2: desc)
+
+  /**
+   * 設定接下來要顯示的排序狀態，並重新調整目前使用者 click 排序的項目
+   * @param currentSortCol 目前排序的項目
+   */
+  nextDir(currentSortCol) {
+    if (this.sortCol === currentSortCol) {
+      if (this.sortDirection < 2) {
+        this.sortDirection++;
+      } else { this.sortDirection = 0; }
+    } else {
+      this.sortDirection = 1;
+      this.sortCol = currentSortCol; // FIXME: 順序有問題
+    }
+
+    console.log('sort dir:', this.sortDirection, ', sorcol: ', this.sortCol);
+  }
 
   dataSourceURL = '/api';
   // listDataURL = this.dataSourceURL + '/list?path='; // TODO : How to use string interpolation to foramt this URL?
@@ -60,44 +79,12 @@ export class FileBrowserComponent implements OnInit {
     const colTag = 'fileName';
     const fileItems = this.data.files;
 
-    if (colTag === this.currentSortColumn) {
+    if (colTag === this.sortCol) {
       fileItems.reverse();
-      this.sortDirection = !this.sortDirection;
-      return;
-    }
-
-    fileItems.sort((a, b) => {
-      const nameA = a.name.toUpperCase();
-      const nameB = b.name.toUpperCase();
-      if (nameA < nameB) {
-        return -1;
-      }
-      if (nameA > nameB) {
-        return 1;
-      }
-      return 0;
-    });
-    this.currentSortColumn = colTag;
-
-  }
-
-  sortColByType(event: Event) {
-    event.preventDefault();
-
-    const colTag = 'type';
-    const fileItems = this.data.files;
-
-    if (colTag === this.currentSortColumn) {
-      fileItems.reverse();
-      return;
-    }
-
-    fileItems.sort((a, b) => {
-      if (a.type < b.type) {
-        return -1;
-      } else if (a.type > b.type) {
-        return 1;
-      } else {
+      // this.sortDirDefault = !this.sortDirDefault;
+      // return;
+    } else {
+      fileItems.sort((a, b) => {
         const nameA = a.name.toUpperCase();
         const nameB = b.name.toUpperCase();
         if (nameA < nameB) {
@@ -107,10 +94,44 @@ export class FileBrowserComponent implements OnInit {
           return 1;
         }
         return 0;
-      }
-    });
+      });
+    }
 
-    this.currentSortColumn = colTag;
+    // this.sortCol = colTag;
+    this.nextDir(colTag);
+
+  }
+
+  sortColByType(event: Event) {
+    event.preventDefault();
+
+    const colTag = 'type';
+    const fileItems = this.data.files;
+
+    if (colTag === this.sortCol) {
+      fileItems.reverse();
+      // return;
+    } else {
+      fileItems.sort((a, b) => {
+        if (a.type < b.type) {
+          return -1;
+        } else if (a.type > b.type) {
+          return 1;
+        } else {
+          const nameA = a.name.toUpperCase();
+          const nameB = b.name.toUpperCase();
+          if (nameA < nameB) {
+            return -1;
+          }
+          if (nameA > nameB) {
+            return 1;
+          }
+          return 0;
+        }
+      });
+    }
+    // this.sortCol = colTag;
+    this.nextDir(colTag);
   }
 
 
@@ -137,32 +158,32 @@ export class FileBrowserComponent implements OnInit {
 
     const colTag = 'size';
     const fileItems = this.data.files;
-    if (colTag === this.currentSortColumn) {
+    if (colTag === this.sortCol) {
       fileItems.reverse();
-      return;
+      // return;
+    } else {
+      this.data.files.sort((a, b) => {
+        return a.size - b.size;
+      });
     }
-
-    this.data.files.sort((a, b) => {
-      return a.size - b.size;
-    });
-
-    this.currentSortColumn = colTag;
-
+    // this.sortCol = colTag;
+    this.nextDir(colTag);
   }
 
   sortColByDate(event: Event) {
     event.preventDefault();
 
+    const colTag = 'date';
     const fileItems = this.data.files;
-    if ('date' === this.currentSortColumn) {
+    if ('date' === this.sortCol) {
       fileItems.reverse();
-      return;
+      // return;
+    } else {
+      fileItems.sort((a, b) => {
+        return a.modified - b.modified;
+      });
     }
-    fileItems.sort((a, b) => {
-      return a.modified - b.modified;
-    });
-
-    this.currentSortColumn = 'date';
+    this.nextDir(colTag);
   }
 
   goToDirOrDownload(event: Event, type: string, fileName: string) {

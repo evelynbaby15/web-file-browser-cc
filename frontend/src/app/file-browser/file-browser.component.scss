@@ -9,10 +9,34 @@ body {
   margin: 0;
 }
 
+/* Sort direction */
 .dir::after {
   content: "▲";
   color: #1ba4b6;
 }
+
+.sort-dir-none {
+  display: none;
+}
+
+.sort-dir-asc {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  background-image: url(/assets/img/arrow-up.png);
+  // background-color: #2f2f2f;
+  background-size: 20px;
+}
+
+.sort-dir-desc {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  background: url(/assets/img/arrow-down.png);
+  background-size: 20px;
+}
+
+
 
 a, button {
   min-width: 48px;
@@ -31,6 +55,7 @@ input {
   border-radius: 4px;
   margin: 0 6px;
 }
+
 
 table {
   font-family: 'Muli', sans-serif;
@@ -59,9 +84,9 @@ th a:hover {
   text-decoration: underline;
 }
 
-th a:hover::after {
-  content: "^";
-}
+// th a:hover::after {
+//   content: "^";
+// }
 
 .data__fileSize--align {
   text-align: right;
