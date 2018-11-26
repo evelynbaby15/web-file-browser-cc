@@ -43,19 +43,45 @@
       <td>...</td>
       <td colspan="3"><a href="" (click)="goToDir(data.parent)">回上一層</a></td>
     </tr>
+
+  <ng-container *ngIf="sortCol !== 'type'">
     <tr *ngFor="let item of data.files">
       <td>
+         <!-- {{ item.type }} -->
         <div *ngIf="item.type == 'D'" class="type-pic--center">
           <img src="/assets/img/folder.png" width="30px" alt="folder" />
         </div>
         <div *ngIf="item.type == 'F'" class="type-pic--center">
           <img src="/assets/img/file.png" width="30px" alt="file" />
         </div>
-        <!-- {{ item.type }} -->
       </td>
       <td><a href="" (click)="goToDirOrDownload($event, item.type, item.name)">{{ item.name }}</a></td>
       <td class="data__fileSize--align"><span>{{ item.size | number: '.0'}}</span></td>
       <td>{{ item.modified | date:'yyyy/MM/dd HH:mm:ss' }}</td>
     </tr>
+  </ng-container>
+  <!-- Sorting with group by date -->
+  <ng-container *ngIf="sortCol == 'type'">   
+    <ng-container *ngFor="let g of groupFiles">
+      <tr>
+          <td colspan="4"> {{ g.group }}</td>
+      </tr>
+      <tr *ngFor="let item of g.fileItems">
+          <td>
+              <!-- {{ item.type }} -->
+             <div *ngIf="item.type == 'D'" class="type-pic--center">
+               <img src="/assets/img/folder.png" width="30px" alt="folder" />
+             </div>
+             <div *ngIf="item.type == 'F'" class="type-pic--center">
+               <img src="/assets/img/file.png" width="30px" alt="file" />
+             </div>
+           </td>
+          <td><a href="" (click)="goToDirOrDownload($event, item.type, item.name)">{{ item.name }}</a></td>
+          <td class="data__fileSize--align"><span>{{ item.size | number: '.0'}}</span></td>
+          <td>{{ item.modified | date:'yyyy/MM/dd HH:mm:ss' }}</td>
+      </tr>
+    </ng-container>
+  </ng-container>
+
   </table>
 </div>

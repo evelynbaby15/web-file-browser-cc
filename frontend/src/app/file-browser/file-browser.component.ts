@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 export class FileBrowserComponent implements OnInit {
   data: FileModel;
   currentPath = 'data';
+  groupFiles = [];
 
   // CSS sort direction
   sortCol: string;
@@ -27,7 +28,7 @@ export class FileBrowserComponent implements OnInit {
       } else { this.sortDirection = 0; }
     } else {
       this.sortDirection = 1;
-      this.sortCol = currentSortCol; // FIXME: 順序有問題
+      this.sortCol = currentSortCol; // FIXME: 順序有問題?
     }
 
     console.log('sort dir:', this.sortDirection, ', sorcol: ', this.sortCol);
@@ -106,11 +107,11 @@ export class FileBrowserComponent implements OnInit {
     event.preventDefault();
 
     const colTag = 'type';
+    this.fileGroupByDate();
+    /*
     const fileItems = this.data.files;
-
     if (colTag === this.sortCol) {
       fileItems.reverse();
-      // return;
     } else {
       fileItems.sort((a, b) => {
         if (a.type < b.type) {
@@ -130,6 +131,7 @@ export class FileBrowserComponent implements OnInit {
         }
       });
     }
+    */
     // this.sortCol = colTag;
     this.nextDir(colTag);
   }
@@ -223,4 +225,49 @@ export class FileBrowserComponent implements OnInit {
       );
 
   }
+
+
+  /*
+    *
+     [{group: "2018/11/26",
+      files: ['item 1', 'item 2']},
+        ...
+     ]
+    */
+  fileGroupByDate() {
+    const fileItems = this.data.files;
+    const group_to_values = fileItems.reduce((obj, item) => {
+      const groupByDate = getDateTimeStart(item.modified);
+      obj[groupByDate] = obj[groupByDate] || [];
+      obj[groupByDate].push(item);
+      return obj;
+    }, {});
+
+    const groups = Object.keys(group_to_values)
+      .map((key) => {
+        return {
+          group: formateDateToReadable(parseInt(key, 10)),
+          fileItems: group_to_values[key]
+        };
+      });
+
+    console.log('groups:', groups);
+    this.groupFiles = groups;
+
+  }
+
+
 }
+
+
+function getDateTimeStart(timestamp: number) {
+  return Math.floor(timestamp / (1000 * 60 * 60 * 24));
+}
+
+function formateDateToReadable(timestamp_start: number) {
+  const date = new Date(timestamp_start * 1000 * 60 * 60 * 24);
+  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} (${dayNames[date.getDay()]})`;
+}
+
+const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
