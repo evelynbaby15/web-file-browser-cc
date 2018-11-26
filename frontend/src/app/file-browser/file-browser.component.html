@@ -1,7 +1,7 @@
 <div class="browser__div">
   <!-- TODO : input file path validator -->
-  PATH: <input type="text" name="currentPath" value="{{ currentPath }}" (keyup.enter)="goToDir(path.value)" #path /><button
-    (click)="goToDir(path.value)">Go</button>
+  PATH: <input type="text" name="currentPath" value="{{ currentPath }}" (keyup.enter)="goToDir($event, path.value)" #path /><button
+    (click)="goToDir($event, path.value)">Go</button>
 
   <hr>
   <table *ngIf="data">
@@ -41,7 +41,7 @@
     </tr>
     <tr *ngIf="data.parent">
       <td>...</td>
-      <td colspan="3"><a href="" (click)="goToDir(data.parent)">回上一層</a></td>
+      <td colspan="3"><a href="" (click)="goToDir($event, data.parent)">回上一層</a></td>
     </tr>
 
   <ng-container *ngIf="sortCol !== 'type'">
@@ -61,7 +61,7 @@
     </tr>
   </ng-container>
   <!-- Sorting with group by date -->
-  <ng-container *ngIf="sortCol == 'type'">   
+  <ng-container *ngIf="sortCol == 'type'">
     <ng-container *ngFor="let g of groupFiles">
       <tr>
           <td colspan="4"> {{ g.group }}</td>

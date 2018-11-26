@@ -25,7 +25,7 @@ export class FileBrowserComponent implements OnInit {
     if (this.sortCol === currentSortCol) {
       if (this.sortDirection < 2) {
         this.sortDirection++;
-      } else { this.sortDirection = 0; }
+      } else { this.sortDirection = 1; }
     } else {
       this.sortDirection = 1;
       this.sortCol = currentSortCol; // FIXME: 順序有問題?
@@ -62,8 +62,9 @@ export class FileBrowserComponent implements OnInit {
     //this.currentPath = path;
   }
 
-  goToDir(dirName: string) {
+  goToDir(event: Event, dirName: string) {
     event.preventDefault();
+
     console.log('Go to dir:', dirName);
     const path = this.dataSourceURL + '/list?path=' + dirName;
     this.getData(path);
@@ -193,7 +194,7 @@ export class FileBrowserComponent implements OnInit {
 
     // 'D': Go to directory
     if (type === 'D') {
-      this.goToDir(this.currentPath + '/' + fileName);
+      this.goToDir(event, this.currentPath + '/' + fileName);
     } else {
       // 'F': download file
       const r: boolean = confirm('Do you really want to donwload the file: ' + fileName + ' ?');
