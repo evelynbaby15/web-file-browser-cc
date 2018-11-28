@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FileModel, FileItem } from '../file-model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { createOfflineCompileUrlResolver } from '@angular/compiler';
 
 @Component({
   selector: 'app-file-browser',
@@ -108,53 +109,36 @@ export class FileBrowserComponent implements OnInit {
     event.preventDefault();
 
     const colTag = 'type';
-    this.fileGroupByDate();
-    /*
-    const fileItems = this.data.files;
+    const groups = this.fileGroupByDate();
+
+    // FIXME: 也要依日期群組排序，排序的是依照日期的時間，不是日期的名字
     if (colTag === this.sortCol) {
-      fileItems.reverse();
+      groups.sort((a, b) => {
+        return ('' + a.group).localeCompare('' + b.group);
+      });
     } else {
-      fileItems.sort((a, b) => {
-        if (a.type < b.type) {
-          return -1;
-        } else if (a.type > b.type) {
-          return 1;
-        } else {
-          const nameA = a.name.toUpperCase();
-          const nameB = b.name.toUpperCase();
-          if (nameA < nameB) {
-            return -1;
-          }
-          if (nameA > nameB) {
-            return 1;
-          }
-          return 0;
-        }
+      groups.sort((a, b) => {
+        return ('' + b.group).localeCompare('' + a.group);
       });
     }
-    */
-    // this.sortCol = colTag;
-    this.nextDir(colTag);
-  }
 
 
-  /*
-  sortColByString(event: Event, name: string) {
-    event.preventDefault();
-
-    const fileItems = this.data.files;
-    if (name === this.currentSortColumn) {
-      fileItems.reverse();
-      return;
-    }
-    fileItems.sort((a, b) => {
-      return this.compareString(a, b, name);
+    groups.forEach((g) => {
+      const fileItems = g.fileItems;
+      if (colTag === this.sortCol) {
+        console.log('reverse');
+        fileItems.sort(sortByTypeReverse);
+      } else {
+        console.log('sort');
+        fileItems.sort(sortByType);
+      }
     });
 
-    this.currentSortColumn = name;
 
+
+    this.groupFiles = groups;
+    this.nextDir(colTag);
   }
-  */
 
   sortColByFileSize(event: Event) {
     event.preventDefault();
@@ -253,12 +237,31 @@ export class FileBrowserComponent implements OnInit {
       });
 
     console.log('groups:', groups);
-    this.groupFiles = groups;
-
+    // this.groupFiles = groups;
+    return groups;
   }
 
 
 }
+
+/** Custom sorting function */
+function sortByType(a, b) {
+  // 先排 type, 若 type 相同，則依 name 排序
+  const r = ('' + a.type).localeCompare('' + b.type);
+  if (r === 0) {
+      return ('' + a.name).localeCompare('' + b.name);
+  }
+  return r;
+}
+
+function sortByTypeReverse(a, b) {
+  const r = ('' + b.type).localeCompare('' + a.type);
+  if (r === 0) {
+      return ('' + a.name).localeCompare('' + b.name);
+  }
+  return r;
+}
+
 
 
 function getDateTimeStart(timestamp: number) {
