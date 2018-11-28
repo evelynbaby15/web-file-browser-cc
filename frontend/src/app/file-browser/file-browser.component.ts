@@ -18,6 +18,21 @@ export class FileBrowserComponent implements OnInit {
   sortCol: string;
   sortDirection = 0; // 預設的排序狀態為 0 (0: no sort, 1: asc, 2: desc)
 
+  dataSourceURL = '/api';
+  // listDataURL = this.dataSourceURL + '/list?path='; // TODO : How to use string interpolation to foramt this URL?
+
+  
+  constructor(private httpClient: HttpClient) { }
+
+  ngOnInit() {
+    if (environment.data) {
+      this.data = environment.data;
+    } else {
+      this.retrieveData();
+    }
+    // this.data = JSON.parse('{"status":200,"msg":"","files":[{"type":"D","name":"test_dir","size":0,"modified":1540606706000},{"type":"F","name":"file.txt","size":205,"modified":1540606806003}]}');
+  }
+
   /**
    * 設定接下來要顯示的排序狀態，並重新調整目前使用者 click 排序的項目
    * @param currentSortCol 目前排序的項目
@@ -29,24 +44,10 @@ export class FileBrowserComponent implements OnInit {
       } else { this.sortDirection = 1; }
     } else {
       this.sortDirection = 1;
-      this.sortCol = currentSortCol; // FIXME: 順序有問題?
+      this.sortCol = currentSortCol;
     }
 
     console.log('sort dir:', this.sortDirection, ', sorcol: ', this.sortCol);
-  }
-
-  dataSourceURL = '/api';
-  // listDataURL = this.dataSourceURL + '/list?path='; // TODO : How to use string interpolation to foramt this URL?
-
-  constructor(private httpClient: HttpClient) { }
-
-  ngOnInit() {
-    if (environment.data) {
-      this.data = environment.data;
-    } else {
-      this.retrieveData();
-    }
-    // this.data = JSON.parse('{"status":200,"msg":"","files":[{"type":"D","name":"test_dir","size":0,"modified":1540606706000},{"type":"F","name":"file.txt","size":205,"modified":1540606806003}]}');
   }
 
 
@@ -109,35 +110,25 @@ export class FileBrowserComponent implements OnInit {
     event.preventDefault();
 
     const colTag = 'type';
+    this.nextDir(colTag); // 因為這邊不能直接使用 sort.reverse, 需要先知道目前的排序是上還是下，所以跟其他排序的 function 呼叫 nextDir() 的時機點不同
+
+    // Step 1: 先將同一天的檔案做群組
     const groups = this.fileGroupByDate();
 
-    // FIXME: 也要依日期群組排序，排序的是依照日期的時間，不是日期的名字
-    if (colTag === this.sortCol) {
-      groups.sort((a, b) => {
-        return ('' + a.group).localeCompare('' + b.group);
-      });
+    // Step 2: 再對群組修改時間做排序
+    if (this.sortDirection === 1) {
+      groups.sort(sortByGroupTypeModifedTimeAsc);
     } else {
-      groups.sort((a, b) => {
-        return ('' + b.group).localeCompare('' + a.group);
-      });
+      groups.sort(sortByGroupTypeModifedTimeDesc);
     }
 
-
+    // Step 3: 最後對每個群組內的檔案做排序，若檔案類型相同，則再對檔名做排序
     groups.forEach((g) => {
       const fileItems = g.fileItems;
-      if (colTag === this.sortCol) {
-        console.log('reverse');
-        fileItems.sort(sortByTypeReverse);
-      } else {
-        console.log('sort');
-        fileItems.sort(sortByType);
-      }
+      fileItems.sort(sortByType);
     });
 
-
-
     this.groupFiles = groups;
-    this.nextDir(colTag);
   }
 
   sortColByFileSize(event: Event) {
@@ -231,6 +222,7 @@ export class FileBrowserComponent implements OnInit {
     const groups = Object.keys(group_to_values)
       .map((key) => {
         return {
+          grpTime: key,
           group: formateDateToReadable(parseInt(key, 10)),
           fileItems: group_to_values[key]
         };
@@ -262,8 +254,16 @@ function sortByTypeReverse(a, b) {
   return r;
 }
 
+ // 依日期群組排序，排序的是日期時間，不是日期的群組名稱
+function sortByGroupTypeModifedTimeAsc(a, b) {
+  return (parseInt(a.grpTime, 10) - parseInt(b.grpTime, 10));
+}
+function sortByGroupTypeModifedTimeDesc(a, b) {
+  return (parseInt(b.grpTime, 10) - parseInt(a.grpTime, 10));
+}
 
 
+/** Time related fuction */
 function getDateTimeStart(timestamp: number) {
   return Math.floor(timestamp / (1000 * 60 * 60 * 24));
 }
