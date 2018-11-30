@@ -40,3 +40,7 @@
 - `go build`
 
 [angular-cli]: https://github.com/angular/angular-cli/wiki
+
+
+### Demo
+![demo-img](https://github.com/evelynbaby15/web-file-browser-cc/blob/br1/frontend/web-file-browser-demo.gif?raw=true)
