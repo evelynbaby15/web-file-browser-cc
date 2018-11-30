@@ -128,7 +128,7 @@ func getOsFileList(filepath string) []DirFile {
 			Filetype: fileType, Filename: file.Name(), Size: int(file.Size()), Modified: JSONTime(file.ModTime())})
 	}
 
-	outputFiles = randomItem(outputFiles)
+	//outputFiles = randomItem(outputFiles)
 	return outputFiles
 }
 
