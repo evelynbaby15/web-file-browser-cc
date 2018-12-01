@@ -43,4 +43,4 @@
 
 
 ### Demo
-![demo-img](https://github.com/evelynbaby15/web-file-browser-cc/blob/br1/frontend/web-file-browser-demo.gif?raw=true)
+![demo-img](https://github.com/evelynbaby15/web-file-browser-cc/blob/br1/frontend/web-file-browser-demo-2.gif?raw=true)
