@@ -1,12 +1,12 @@
 <div class="browser__div">
   <!-- TODO : input file path validator -->
-  PATH: <input type="text" name="currentPath" value="{{ currentPath }}" (keyup.enter)="goToDir($event, path.value)" #path /><button
+  PATH: <input type="text" name="gotoPath" value="{{ gotoPath }}" (keyup.enter)="goToDir($event, path.value)" #path /><button
     (click)="goToDir($event, path.value)">Go</button>
 
   <hr>
   <table *ngIf="data">
     <tr>
-      <th>
+      <th class="type">
         <a href="" (click)="sortColByType($event)">種類</a>
         <span [ngClass]="{
             'sort-dir-none': sortDirection == '0' && sortCol == 'type',
@@ -22,7 +22,7 @@
           'sort-dir-desc': sortDirection == '2' && sortCol == 'fileName'}">
         </span>
       </th>
-      <th>
+      <th class="size">
         <a href="" (click)="sortColByFileSize($event)">檔案大小</a>
         <span [ngClass]="{
           'sort-dir-none': sortDirection == '0' && sortCol == 'size',
@@ -30,7 +30,7 @@
           'sort-dir-desc': sortDirection == '2' && sortCol == 'size'}">
         </span>
       </th>
-      <th>
+      <th class="date">
         <a href="" (click)="sortColByDate($event)">日期+時間</a>
         <span [ngClass]="{
             'sort-dir-none': sortDirection == '0' && sortCol == 'date',
@@ -41,7 +41,12 @@
     </tr>
     <tr *ngIf="data.parent">
       <td>...</td>
-      <td colspan="3"><a href="" (click)="goToDir($event, data.parent)">回上一層</a></td>
+      <td colspan="3">
+        <a href="" (click)="goToDir($event, data.parent)">
+          <img src="/assets/img/iconfinder_45_62702.png"/>
+          回上一層
+        </a>
+      </td>
     </tr>
 
   <ng-container *ngIf="sortCol !== 'type'">
@@ -57,7 +62,7 @@
       </td>
       <td><a href="" (click)="goToDirOrDownload($event, item.type, item.name)">{{ item.name }}</a></td>
       <td class="data__fileSize--align"><span>{{ item.size | number: '.0'}}</span></td>
-      <td>{{ item.modified | date:'yyyy/MM/dd HH:mm:ss' }}</td>
+      <td class="date">{{ item.modified | date:'yyyy/MM/dd HH:mm:ss' }}</td>
     </tr>
   </ng-container>
   <!-- Sorting with group by date -->

@@ -12,6 +12,7 @@ import { createOfflineCompileUrlResolver } from '@angular/compiler';
 export class FileBrowserComponent implements OnInit {
   data: FileModel;
   currentPath = 'data';
+  gotoPath = '';
   groupFiles = [];
 
   // CSS sort direction
@@ -21,7 +22,7 @@ export class FileBrowserComponent implements OnInit {
   dataSourceURL = '/api';
   // listDataURL = this.dataSourceURL + '/list?path='; // TODO : How to use string interpolation to foramt this URL?
 
-  
+
   constructor(private httpClient: HttpClient) { }
 
   ngOnInit() {
@@ -52,29 +53,60 @@ export class FileBrowserComponent implements OnInit {
 
 
   retrieveData() {
-    const path = this.dataSourceURL + '/list?path=' + this.currentPath;
-    this.getData(path);
+    this.getData(this.currentPath);
   }
 
-  getData(path: string) {
+  getData(dirName: string) {
+    dirName = this.checkDirStr(dirName);
+    if (dirName === null) {
+      console.error('dir name check fails.');
+      return;
+    }
+
+    const path = this.dataSourceURL + '/list?path=' + dirName;
+
     this.httpClient.get(path)
       .subscribe(
-        (val: FileModel) => { this.data = val; console.log('parent:', val.parent, ', path:', val.path); }
-      );
-    //this.currentPath = path;
+        (val: FileModel) => {
+          this.data = val;
+          console.log('parent:', val.parent, ', path:', val.path);
+          this.currentPath = dirName;
+          this.gotoPath = dirName;
+        }
+        , error => {
+          console.log('Get http data fails. this.currentPath: ', this.currentPath);
+          // FIXME: Revert back to latest correct path.
+          // FIXME: 兩個 value. 想要去的跟目前所在的需要是不同的變數
+        });
   }
 
   goToDir(event: Event, dirName: string) {
+    console.log('Go to dir:', dirName);
     event.preventDefault();
 
-    console.log('Go to dir:', dirName);
-    const path = this.dataSourceURL + '/list?path=' + dirName;
-    this.getData(path);
-    // this.httpClient.get(path)
-    //   .subscribe(
-    //     (val: FileModel) => { this.data = val; console.log(val); }
-    //   );
-    this.currentPath = dirName;
+
+    this.getData(dirName);
+    // this.currentPath = dirName;
+
+  }
+
+  /**
+   * 檢查檔案路徑格式是否合法
+   *
+   * @param directoryName
+   */
+  checkDirStr(directoryName: string) {
+    // 檔案或目錄的 RE 需要符合才繼續往下執行
+    let str = directoryName.trim();
+    const myRe = /^data(\/[\\\S|*\S]?.*)?(\/)?$/;
+    if (str.match(myRe) !== null) {
+      const lastDirChar = str.charAt(str.length - 1);
+      if (lastDirChar === '/') {
+        str = str.slice(0, -1);
+      }
+      return str;
+    }
+    return null;
   }
 
   sortColByFileName(event: Event) {
@@ -108,7 +140,7 @@ export class FileBrowserComponent implements OnInit {
 
   sortColByType(event: Event) {
     event.preventDefault();
-
+    // FIXME: 按下種類排序之後，goToDir() 就會失效？
     const colTag = 'type';
     this.nextDir(colTag); // 因為這邊不能直接使用 sort.reverse, 需要先知道目前的排序是上還是下，所以跟其他排序的 function 呼叫 nextDir() 的時機點不同
 
@@ -166,7 +198,7 @@ export class FileBrowserComponent implements OnInit {
 
   goToDirOrDownload(event: Event, type: string, fileName: string) {
     event.preventDefault();
-
+    // FIXME: 點了上方排序之後，再點目錄好像也會有問題?
     // 'D': Go to directory
     if (type === 'D') {
       this.goToDir(event, this.currentPath + '/' + fileName);
@@ -228,7 +260,7 @@ export class FileBrowserComponent implements OnInit {
         };
       });
 
-    console.log('groups:', groups);
+    // console.log('groups:', groups);
     // this.groupFiles = groups;
     return groups;
   }
@@ -241,7 +273,7 @@ function sortByType(a, b) {
   // 先排 type, 若 type 相同，則依 name 排序
   const r = ('' + a.type).localeCompare('' + b.type);
   if (r === 0) {
-      return ('' + a.name).localeCompare('' + b.name);
+    return ('' + a.name).localeCompare('' + b.name);
   }
   return r;
 }
@@ -249,12 +281,12 @@ function sortByType(a, b) {
 function sortByTypeReverse(a, b) {
   const r = ('' + b.type).localeCompare('' + a.type);
   if (r === 0) {
-      return ('' + a.name).localeCompare('' + b.name);
+    return ('' + a.name).localeCompare('' + b.name);
   }
   return r;
 }
 
- // 依日期群組排序，排序的是日期時間，不是日期的群組名稱
+// 依日期群組排序，排序的是日期時間，不是日期的群組名稱
 function sortByGroupTypeModifedTimeAsc(a, b) {
   return (parseInt(a.grpTime, 10) - parseInt(b.grpTime, 10));
 }
