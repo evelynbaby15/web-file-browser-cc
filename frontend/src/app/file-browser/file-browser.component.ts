@@ -72,6 +72,9 @@ export class FileBrowserComponent implements OnInit {
           console.log('parent:', val.parent, ', path:', val.path);
           this.currentPath = dirName;
           this.gotoPath = dirName;
+
+          // 每次進去目錄之後就重新設定排序
+          this.nextDir('');
         }
         , error => {
           console.log('Get http data fails. this.currentPath: ', this.currentPath);

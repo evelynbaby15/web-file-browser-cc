@@ -24,7 +24,7 @@ body {
   display: inline-block;
   background-image: url(/assets/img/arrow-up.png);
   background-size: 20px;
-  margin: 0 10px -5px 2px;
+  margin: 0 0 -5px 2px;
 }
 
 .sort-dir-desc {
@@ -75,12 +75,16 @@ td.date, th.date {
   width: 230px;
 }
 
+td.type {
+  padding: 0;
+}
+
 th.type {
   width: 40px;
 }
 
 th.size {
-  width: 100px;
+  width: 120px;
 }
 
 th {
